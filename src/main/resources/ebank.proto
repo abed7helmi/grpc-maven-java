@@ -1,0 +1,25 @@
+//la version de proto
+syntax="proto3";
+
+option java_package="org.example.stubs";
+
+// on declare les services
+service BankService{
+  rpc convert(ConvertCurrencyRequest /* input */) returns (ConvertCurrencyResponse /*response*/); // unary model
+  rpc performStream(stream ConvertCurrencyRequest) returns (ConvertCurrencyResponse); // Client streaming model
+  rpc getStream(ConvertCurrencyRequest) returns (stream ConvertCurrencyResponse); // Server streaming model
+  rpc fullStream(stream ConvertCurrencyRequest) returns (stream ConvertCurrencyResponse); // bidi stream model
+}
+
+// on declare les messages (les input ey response)
+message ConvertCurrencyRequest{
+  double amount=1;
+  string currencyFrom=2;
+  string currencyTo=3;
+}
+message ConvertCurrencyResponse{
+  double amount=1;
+  string currencyFrom=2;
+  string currencyTo=3;
+  double result=4;
+}
