@@ -56,6 +56,7 @@ public class BankGrpcService extends BankServiceGrpc.BankServiceImplBase {
 
     @java.lang.Override
     public StreamObserver<Ebank.ConvertCurrencyRequest> performStream(StreamObserver<Ebank.ConvertCurrencyResponse> responseObserver) {
+        System.out.println("test Client streaming");
         return new StreamObserver<Ebank.ConvertCurrencyRequest>() {
             double sum=0;
             // a chaque fois que le client m'envoie un item
@@ -80,6 +81,26 @@ public class BankGrpcService extends BankServiceGrpc.BankServiceImplBase {
 
     @java.lang.Override
     public StreamObserver<Ebank.ConvertCurrencyRequest> fullStream(StreamObserver<Ebank.ConvertCurrencyResponse> responseObserver) {
-        return super.fullStream(responseObserver);
+        System.out.println("test Full streaming");
+        return new StreamObserver<Ebank.ConvertCurrencyRequest>() {
+            @Override
+            public void onNext(Ebank.ConvertCurrencyRequest convertCurrencyRequest) {
+                Ebank.ConvertCurrencyResponse response= Ebank.ConvertCurrencyResponse.newBuilder()
+                        .setResult(convertCurrencyRequest.getAmount()*21)
+                        .build();
+                responseObserver.onNext(response);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onCompleted();
+            }
+        };
     }
+
 }
